@@ -102,6 +102,11 @@
 		
 		map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 	
+		// 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
+		kakao.maps.event.addListener(map, 'idle', function() {
+			searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+		});
+	
 	
 	 console.log(0);
 if (navigator.geolocation) {
@@ -286,11 +291,6 @@ function displayMarker(locPosition, message) {
 				    }
 			}else{
 				initGetJson();
-				
-				// 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
-				kakao.maps.event.addListener(map, 'idle', function(response) {
-				    searchAddrFromCoords(map.getCenter(), displayCenterInfo);
-				});
 
 				positions2 = positions2.filter(function(e){return e.place_name.indexOf(keyword) >= 0});	//검색키워드 필터 1
 				console.log("placesSearchCB region_2depth_name : "+region_2depth_name);
