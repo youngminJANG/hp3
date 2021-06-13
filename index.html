@@ -296,7 +296,13 @@ function displayMarker(locPosition, message) {
 				initGetJson();
 
 				positions2 = positions2.filter(function(e){return e.place_name.indexOf(keyword) >= 0});	//검색키워드 필터 1
-				positions2 = positions2.filter(function(e){return e.address_name.indexOf(region_2depth_name) >= 0}); // 내위치 (구단위)
+				for(var i =0; i < positions2.length; i++){
+					console.log(positions2[i].address_name.indexOf(region_2depth_name) > 0);
+					if(!positions2[i].address_name.indexOf(region_2depth_name) > 0){
+						positions2 = positions2.filter(function(e){return e.address_name.indexOf(region_2depth_name) >= 0}); // 내위치 (구단위)
+					}
+				}
+				
 				
 				pagination.totalCount = positions2.length;
 				pagination.last =  Math.ceil(pagination.totalCount/pagination.perPage);
