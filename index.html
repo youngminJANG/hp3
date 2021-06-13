@@ -113,9 +113,7 @@
 		
 		// 지도 타입 컨트롤을 지도에 표시합니다
 		map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-		
-		// 키워드로 장소를 검색합니다
-		searchPlaces();
+
 		//initGetJson();
 
 		var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
@@ -173,9 +171,8 @@
 		
 				
 	
-	 console.log(0);
+	
 if (navigator.geolocation) {
-    console.log(1);
     // GeoLocation을 이용해서 접속 위치를 얻어옵니다
     navigator.geolocation.getCurrentPosition(function(position) {
         
@@ -220,7 +217,9 @@ function displayCenterInfo(result, status) {
                 break;
             }
         }
-    }    
+    }
+	// 키워드로 장소를 검색합니다
+	searchPlaces();
 }
 	
 function searchAddrFromCoords(coords, callback) {
@@ -297,7 +296,7 @@ function displayMarker(locPosition, message) {
 				initGetJson();
 
 				positions2 = positions2.filter(function(e){return e.place_name.indexOf(keyword) >= 0});	//검색키워드 필터 1
-				console.log("placesSearchCB region_2depth_name : "+region_2depth_name);
+				positions2 = positions2.filter(function(e){return e.address_name.indexOf(region_2depth_name) >= 0}); // 내위치 (구단위)
 				
 				pagination.totalCount = positions2.length;
 				pagination.last =  Math.ceil(pagination.totalCount/pagination.perPage);
