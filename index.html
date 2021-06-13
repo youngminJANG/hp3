@@ -74,7 +74,8 @@
 		var ps = "";
 		var map = "";
 		var infowindow = "";
-		var keyword = "";
+		var keyword = "";			//검색키워드
+		var region_2depth_name = "";		//내 위치(구단위)
 		var searchMode = "myJson";		//myJson : 나의 지정된 목록 , kakao : 카카오에서 지정된 목록 
 		
 			
@@ -138,7 +139,7 @@ if (navigator.geolocation) {
 function displayCenterInfo(result, status) {
     if (status === kakao.maps.services.Status.OK) {
         //var infoDiv = document.getElementById('centerAddr');
-	var region_2depth_name = "";
+	
         for(var i = 0; i < result.length; i++) {
             // 행정동의 region_type 값은 'H' 이므로
             if (result[i].region_type === 'H') {
@@ -147,8 +148,6 @@ function displayCenterInfo(result, status) {
                 break;
             }
         }
-	console.log("region_2depth_name : "+region_2depth_name);
-	 
     }    
 }
 	
@@ -292,7 +291,9 @@ function displayMarker(locPosition, message) {
 				    }
 			}else{
 				initGetJson();
-				positions2 = positions2.filter(function(e){return e.place_name.indexOf(keyword) >= 0});
+				positions2 = positions2.filter(function(e){return e.place_name.indexOf(keyword) >= 0});	//검색키워드 필터 1
+				console.log("region_2depth_name : "+region_2depth_name);
+				
 				pagination.totalCount = positions2.length;
 				pagination.last =  Math.ceil(pagination.totalCount/pagination.perPage);
 				
