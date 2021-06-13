@@ -178,8 +178,6 @@ if (navigator.geolocation) {
         
         lat = position.coords.latitude; // 위도
         lon = position.coords.longitude; // 경도
-        console.log("lat : "+ lat);
-	console.log("lon : "+ lon);
         var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
             message = '<div style="padding:5px;">@현위치@</div>'; // 인포윈도우에 표시될 내용입니다
         console.log("locPosition : "+ locPosition);
@@ -297,8 +295,7 @@ function displayMarker(locPosition, message) {
 
 				positions2 = positions2.filter(function(e){return e.place_name.indexOf(keyword) >= 0});	//검색키워드 필터 1
 				for(var i =0; i < positions2.length; i++){
-					console.log(positions2[i].address_name.indexOf(region_2depth_name) > 0);
-					if(!positions2[i].address_name.indexOf(region_2depth_name) > 0){
+					if(positions2[i].address_name.indexOf(region_2depth_name) > 0){
 						positions2 = positions2.filter(function(e){return e.address_name.indexOf(region_2depth_name) >= 0}); // 내위치 (구단위)
 					}
 				}
