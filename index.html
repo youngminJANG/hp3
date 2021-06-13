@@ -77,8 +77,8 @@
 		var keyword = "";			//검색키워드
 		var region_2depth_name = "";		//내 위치(구단위)
 		var searchMode = "myJson";		//myJson : 나의 지정된 목록 , kakao : 카카오에서 지정된 목록 
-		
-			
+		var lat = "";
+		var lon = "";
 		var initGetJson = function(){
 			$.ajax({
 				url: "/hp3/json/inchun.json",
@@ -101,8 +101,8 @@ if (navigator.geolocation) {
     // GeoLocation을 이용해서 접속 위치를 얻어옵니다
     navigator.geolocation.getCurrentPosition(function(position) {
         
-        var lat = position.coords.latitude, // 위도
-            lon = position.coords.longitude; // 경도
+        lat = position.coords.latitude; // 위도
+        lon = position.coords.longitude; // 경도
         console.log("lat : "+ lat);
 	console.log("lon : "+ lon);
         var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
