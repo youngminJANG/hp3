@@ -101,6 +101,76 @@
 			    };
 
 		map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	
+		// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
+		var mapTypeControl = new kakao.maps.MapTypeControl();
+		
+		// 장소 검색 객체를 생성합니다
+		ps = new kakao.maps.services.Places();  
+		
+		// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
+		infowindow = new kakao.maps.InfoWindow({zIndex:1});
+		
+		// 지도 타입 컨트롤을 지도에 표시합니다
+		map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+		
+		// 키워드로 장소를 검색합니다
+		searchPlaces();
+		//initGetJson();
+
+		var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+		for (var i = 0; i < positions.length; i++) {
+			// 마커 이미지의 이미지 크기 입니다
+			var imageSize = new kakao.maps.Size(24, 35);
+			// 마커 이미지를 생성합니다
+			var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+			// 마커를 생성합니다
+			var marker = new kakao.maps.Marker({
+				map: map, // 마커를 표시할 지도
+				position: positions[i].latlng, // 마커를 표시할 위치
+				title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+				image: markerImage // 마커 이미지
+			});
+			
+			 var oldOverlay = "";
+			 var overlay = "";
+			(function(marker, place) {
+				  // 마크 클릭 시
+				  kakao.maps.event.addListener(marker, 'click', function() {
+					console.log("oldOverlay : " + oldOverlay);
+					if(oldOverlay != ""){
+						overlay.setMap(null);
+					}
+				    overlay = new kakao.maps.CustomOverlay({
+				      // 오버레이에 띄울 내용
+				      content: '<div class="wrap" style="background-color: white;width: 100%;height: 100%;">' +
+				            '    <div class="info">' +
+				            '        <div class="title">약국명 : ' +
+				            place.title +
+				            '        </div>' +
+				            '        <div class="body">' +
+				            '            <div class="desc">' +
+				            '                <div class="ellipsis">주 소 : ' + place.addr1 + '</div>' +
+				            '		       <div class="jibun ellipsis">전화번호 : ' + place.tel + '</div>' +
+				            '            </div>' +
+				            '        </div>' +
+				            '    </div>' +
+				            '</div>',
+				      map: map,
+				      position: marker.getPosition()
+				    });
+				    oldOverlay = overlay; 
+				    // 아무데나 클릭하게되면 overlay를 끄기
+				    kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+				      overlay.setMap(null);
+				    })
+				    //console.log(overlay);
+				    overlay.setMap(map);
+				  })
+				})(marker, positions[i])
+			
+		}
+		
 				
 	
 	 console.log(0);
@@ -183,74 +253,6 @@ function displayMarker(locPosition, message) {
     map.setCenter(locPosition);      
 }    
 		
-		// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
-		var mapTypeControl = new kakao.maps.MapTypeControl();
-		
-		// 장소 검색 객체를 생성합니다
-		ps = new kakao.maps.services.Places();  
-		
-		// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
-		infowindow = new kakao.maps.InfoWindow({zIndex:1});
-		
-		// 지도 타입 컨트롤을 지도에 표시합니다
-		map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-		
-		// 키워드로 장소를 검색합니다
-		searchPlaces();
-		//initGetJson();
-
-		var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-		for (var i = 0; i < positions.length; i++) {
-			// 마커 이미지의 이미지 크기 입니다
-			var imageSize = new kakao.maps.Size(24, 35);
-			// 마커 이미지를 생성합니다
-			var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-			// 마커를 생성합니다
-			var marker = new kakao.maps.Marker({
-				map: map, // 마커를 표시할 지도
-				position: positions[i].latlng, // 마커를 표시할 위치
-				title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-				image: markerImage // 마커 이미지
-			});
-			
-			 var oldOverlay = "";
-			 var overlay = "";
-			(function(marker, place) {
-				  // 마크 클릭 시
-				  kakao.maps.event.addListener(marker, 'click', function() {
-					console.log("oldOverlay : " + oldOverlay);
-					if(oldOverlay != ""){
-						overlay.setMap(null);
-					}
-				    overlay = new kakao.maps.CustomOverlay({
-				      // 오버레이에 띄울 내용
-				      content: '<div class="wrap" style="background-color: white;width: 100%;height: 100%;">' +
-				            '    <div class="info">' +
-				            '        <div class="title">약국명 : ' +
-				            place.title +
-				            '        </div>' +
-				            '        <div class="body">' +
-				            '            <div class="desc">' +
-				            '                <div class="ellipsis">주 소 : ' + place.addr1 + '</div>' +
-				            '		       <div class="jibun ellipsis">전화번호 : ' + place.tel + '</div>' +
-				            '            </div>' +
-				            '        </div>' +
-				            '    </div>' +
-				            '</div>',
-				      map: map,
-				      position: marker.getPosition()
-				    });
-				    oldOverlay = overlay; 
-				    // 아무데나 클릭하게되면 overlay를 끄기
-				    kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-				      overlay.setMap(null);
-				    })
-				    //console.log(overlay);
-				    overlay.setMap(map);
-				  })
-				})(marker, positions[i])
-			
-		}
 		
 		
 		// 키워드 검색을 요청하는 함수입니다
