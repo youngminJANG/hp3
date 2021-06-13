@@ -138,14 +138,17 @@ if (navigator.geolocation) {
 function displayCenterInfo(result, status) {
     if (status === kakao.maps.services.Status.OK) {
         var infoDiv = document.getElementById('centerAddr');
-
+	var region_2depth_name = "";
         for(var i = 0; i < result.length; i++) {
             // 행정동의 region_type 값은 'H' 이므로
             if (result[i].region_type === 'H') {
                 infoDiv.innerHTML = result[i].address_name;
+		region_2depth_name = result[i].region_2depth_name;
                 break;
             }
         }
+	console.log("region_2depth_name : "+region_2depth_name);
+	 
     }    
 }
 	
